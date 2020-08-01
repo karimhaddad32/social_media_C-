@@ -1,7 +1,7 @@
 # social_media_CSharp
 A Facebook clone.
 
-# Contributers:
+# Contributors:
 
 Karim Haddad
 
