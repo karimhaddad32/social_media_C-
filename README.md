@@ -3,8 +3,8 @@ A Facebook clone.
 
 # Contributers:
 
-*Karim Haddad
-*Eliza Gaudio
-*Peter Guakov
+Karim Haddad
+Eliza Gaudio
+Peter Guakov
 
 
