@@ -1,0 +1,242 @@
+﻿@model IEnumerable<Profile.Models.Picture>
+
+@{
+    int current_user = int.Parse(Session["user_id"].ToString());
+}
+
+<script>
+    $(document).ready(function () {
+        var comments = $(".comments");
+        console.log(comments);
+
+        comments.each(function () {
+            $(this).keyup(function () {
+
+                console.log($(this.nextElementSibling));
+                if (this.value == "" || !this.value.replace(/\s/g, '').length) {
+                    $(this.nextElementSibling).prop('disabled', true);
+                } else {
+                    $(this.nextElementSibling).prop('disabled', false);
+                }
+
+            });
+        });
+
+        var reactions = $(".reaction");
+ 
+        $(".reaction").each(function () {
+     
+        
+            $(this).on("click",function () {
+
+                console.log($(this).attr("object_id"));
+                var url = "";
+        
+                var reaction = {};
+            
+
+
+
+                if ($(this).hasClass("comment")) {
+                    url = "@Url.Action("AddReaction", "Comment")";
+                    reaction.comment_id = $(this).attr("object_id");
+                       console.log(reaction.comment_id);
+                } else {
+                    url = "@Url.Action("AddReaction", "Picture")";
+                    reaction.picture_id = $(this).attr("object_id");
+                  console.log(reaction.picture_id);
+                }
+                console.log(url);
+
+                reaction.reaction_type_id = $(this).attr("reaction_id");
+                
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: '{reaction :' + JSON.stringify(reaction) + '}',
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+
+                           console.log(res);
+                        console.log(reaction);
+
+                        if (res.type == "picture") {
+                            var target = $(".picture[object_id ='" + reaction.picture_id + "'][reaction_id = '" + reaction.reaction_type_id + "']");
+                              var oldTarget =  $(".picture[object_id ='" + reaction.picture_id + "'][reaction_id = '" + res.old_reaction_id + "']");
+                        } else {
+                            var target = $(".comment[object_id ='" + reaction.comment_id + "'][reaction_id = '" + reaction.reaction_type_id + "']");
+                            var oldTarget = $(".comment[object_id ='" + reaction.comment_id + "'][reaction_id = '" + res.old_reaction_id + "']");
+               
+                        }
+
+                       console.log(oldTarget);
+                        if (res.is_new) {
+                              target.children()[1].innerText = parseInt(target.children()[1].innerText) + 1;
+                        } else {
+            
+
+                                if (oldTarget.attr("reaction_id") == target.attr("reaction_id")) {
+
+                                    oldTarget.children()[1].innerText = parseInt(target.children()[1].innerText) - 1;
+
+                                } else {
+                                      target.children()[1].innerText = parseInt(target.children()[1].innerText) + 1;
+                                      oldTarget.children()[1].innerText = parseInt(target.children()[1].innerText) - 1;
+
+                                }
+                            }
+
+
+                    
+                    },
+                    error: function () {
+                        console.log("something wrong happend in Add Reaction")
+                     }
+
+               
+                });
+
+
+
+            });
+        });
+    });
+
+    function showComments(btn) {
+        console.log(btn);
+        console.log($(btn).parent().next("div").attr("hidden"));
+        if ($(btn).parent().next("div").attr("hidden") == "hidden") {
+            $(btn).parent().next("div").attr("hidden", false);
+        }
+        else {
+            $(btn).parent().next("div").attr("hidden", true);
+        }
+    }
+</script>
+
+@foreach (var item in Model.OrderByDescending(p => p.picture_id))
+{
+<div class="card gedf-card" style="color:black">
+    <div class="card-header" style="background-color:lightskyblue">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="mr-2">
+                    @if (@item.Profile.Pictures.SingleOrDefault(p => p.Profile.profile_picture == p.picture_id) != null)
+                    {
+                        <img class="img-circle" width="60" height="60" src="/Images/@item.Profile.Pictures.SingleOrDefault(p => p.Profile.profile_picture == p.picture_id).path" alt="">
+
+                    }
+                    else
+                    {
+                        <img class="img-circle" width="60" height="60" src="/Images/Default.png" alt="">
+
+                    }
+                </div>
+                <div class="ml-2">
+                    <div class="h5 mb-2" style="font-size: 15px; padding-top:6px">@Html.ActionLink(@item.Profile.first_name + " " + @item.Profile.last_name, "Details", "Home", new { id = @item.Profile.profile_id }, null)</div>
+                    <div class="h7 text-muted"><img src="~/Images/Location.png" width="10" height="16"> @Html.DisplayFor(modelItem => item.location)</div>
+                    <div class="h7 text-muted">@item.timestamp.Month/@item.timestamp.Day/@item.timestamp.Year @item.timestamp.ToString("HH:mm")</div>
+                </div>
+            </div>
+            @if (item.profile_id == current_user)
+            {
+             
+                <div class="dropdown">
+                    <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                        <div class="h6 dropdown-header">Settings</div>
+                        @Html.ActionLink("Set as Profile Picture", "SetProfilePicture", "Picture", new { id = item.picture_id, profile_id = item.profile_id }, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Delete", "Delete", "Picture", new { id = item.picture_id }, new { @class = "dropdown-item" })
+                    </div>
+                </div>
+       
+            }
+
+        </div>
+
+    </div>
+    <div class="card-body" style="background-color:lightcyan">
+        <img class="rounded mx-auto d-block" style="max-width:400px; max-height:400px; min-width:200px; min-height:200px" src="/Images/@Html.DisplayFor(modelItem => item.path)" />
+        <div class="text-center mb-2" style="font-size: 20px; font-family: 'Open Sans', sans-serif; padding-top: 10px">@Html.DisplayFor(modelItem => item.caption)</div>
+    </div>
+
+    <div class="card-footer" style="background-color:#DDDDDD; display:inline-flex; ">
+        <div href="@Url.Action("AddReaction", "Picture", new { id = item.picture_id, reaction_id = 1 })" object_id="@item.picture_id" reaction_id="1" class="picture reaction card-link" >
+            <img src="~/Reaction_Icon/thumbs_up.png" />
+            <div style="padding-left: 10px; padding-top: 5px">
+                @item.Picture_Reaction.Where(cr => cr.reaction_type_id == 1).Count()
+            </div>
+        
+        </div>
+     
+
+        <div href="@Url.Action("AddReaction", "Picture", new { id = item.picture_id, reaction_id = 2 })" object_id="@item.picture_id" reaction_id="2" class="picture reaction card-link" >
+            <img src="~/Reaction_Icon/thumbs_down.png" />
+            <div style="padding-left: 10px; padding-top: 5px">
+               @item.Picture_Reaction.Where(cr => cr.reaction_type_id == 2).Count()
+            </div>
+        </div>
+
+
+        <div href="@Url.Action("AddReaction", "Picture", new { id = item.picture_id, reaction_id = 3 })" object_id="@item.picture_id" reaction_id="3" class="picture reaction card-link" >
+            <img src="~/Reaction_Icon/heart_icon.png" />
+            <div style="padding-left: 10px; padding-top: 5px"> 
+                @item.Picture_Reaction.Where(cr => cr.reaction_type_id == 3).Count()
+            </div>
+        </div>
+    
+
+    <div href="@Url.Action("AddReaction", "Picture", new { id = item.picture_id, reaction_id = 4 })" object_id="@item.picture_id" reaction_id="4" class="picture reaction card-link" >
+        <img src="~/Reaction_Icon/broken_heart.png" />
+        <div style="padding-left: 10px; padding-top: 5px">
+            @item.Picture_Reaction.Where(cr => cr.reaction_type_id == 4).Count()
+        </div>
+    </div>
+      
+
+    <div href="@Url.Action("AddReaction", "Picture", new { id = item.picture_id, reaction_id = 5 })" object_id="@item.picture_id" reaction_id="5" class="picture reaction card-link" >
+        <img src="~/Reaction_Icon/happy.png" />
+        <div style="padding-left: 10px; padding-top: 5px">
+           @item.Picture_Reaction.Where(cr => cr.reaction_type_id == 5).Count()
+        </div>
+    </div>
+ 
+
+    <div href="@Url.Action("AddReaction", "Picture", new { id = item.picture_id, reaction_id = 6 })" object_id="@item.picture_id" reaction_id="6" class="picture reaction card-link" >
+        <img src="~/Reaction_Icon/sad.png" />
+        <div style="padding-left: 10px; padding-top: 5px">
+        @item.Picture_Reaction.Where(cr => cr.reaction_type_id == 6).Count()
+        </div>
+    </div>
+     
+
+    <div href="@Url.Action("AddReaction", "Picture", new { id = item.picture_id, reaction_id = 7 })" object_id="@item.picture_id" reaction_id="7" class="picture reaction card-link" >
+        <img src="~/Reaction_Icon/angry.png" />
+        <div style="padding-left: 10px; padding-top: 5px">
+           @item.Picture_Reaction.Where(cr => cr.reaction_type_id == 7).Count()
+        </div>
+    </div>
+ 
+
+        <button onclick="showComments(this)" class="btn-link card-link"><i class="fa fa-comment  "></i>Comments @(item.Comments.Count() > 0 ? "(" + item.Comments.Count().ToString() + ")" : "")</button>
+    </div>
+    <div class="comments-table" hidden>
+        <div style="overflow:auto; max-height: 500px">
+            @Html.Partial("~/Views/Wall/CommentList.cshtml", item.Comments)
+        </div>
+        @using (Html.BeginForm("Create", "Comment", new { id = item.picture_id }, FormMethod.Post, htmlAttributes: new { style = "margin:5px" }))
+        {
+            <input type="text" name="comment" class="form-control comments" placeholder="Enter your comment">
+            <input type="submit" name="Create" class="btn btn-primary" , style="margin: 0px 0px 0px 5px;" value="Add Comment" disabled>
+        }
+    </div>
+
+</div>
+}
+
+
+
+

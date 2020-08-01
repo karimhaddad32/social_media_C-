@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Profile.Models.Message>
+
+@{
+    ViewBag.Title = "MessageDetails";
+    int receiver_id = ViewBag.receiver;
+    int current_id = int.Parse(Session["user_id"].ToString());
+    string receiver_name = ViewBag.receiver_name;
+    string path = ViewBag.receiver_image_path;
+
+}
+
+<script>
+    $(document).ready(function () {
+        var element = document.getElementById("messages_panel");
+        element.scrollTop = element.scrollHeight;
+
+        $("#btn_send").unbind().click(function () {
+
+            var text = document.getElementById("text");
+            var msg = {};
+            msg.message1 = text.value;
+            msg.receiver_id = @receiver_id.ToString();
+            msg.sender_id = @current_id.ToString();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Send")',
+                data: '{msg: '  + JSON.stringify(msg) + '}',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+
+                    if (res != null) {
+                    console.log(res);
+                    var chat = document.getElementById("messages_panel");
+                        console.log(chat);
+
+                        var newText = '<div class="message last" style = "display:inline-flex" ><div class="wrap1">'
+                            + text.value + '</div><p style="font-size:10px;margin:0px 0px 5px 5px;">'
+                            + res.timestamp + '</p></div>'
+                        var wrapper = document.createElement("div");
+                        wrapper.className = "mine messages";
+                        wrapper.innerHTML = newText;
+                        if (chat.children.length == 0) {
+                             chat.appendChild(wrapper);
+                        } else {
+                               if (chat.children[chat.children.length - 1].className == "mine messages") {
+                            chat.children[chat.children.length - 1].firstElementChild.classList.remove("last");
+                            }
+                            chat.appendChild(wrapper);
+                        }
+
+                    element.scrollTop = element.scrollHeight;
+                        text.value = "";
+                         }
+                },
+                error: function () {
+                   //nothing
+                }
+            });
+    
+        });
+    });
+</script>
+<div class="d-flex justify-content-between align-items-center card-header">
+    <div class="mr-2">
+        <img class="img-circle" width="60" height="60" src="/Images/@path" alt="">
+        <div style="display:inline-flex;margin:10px">
+            <h4 style="text-align:center; margin:10px">@receiver_name</h4>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="chat" style="overflow:auto; overflow-x: hidden; height:400px;max-height: 400px; background-color:lightblue " id="messages_panel" >
+
+    @foreach (var item in Model)
+    {
+
+        if (item.sender_id == current_id)
+        {
+            <script>
+                var chat = document.getElementById("messages_panel");
+
+                if (chat.children[chat.children.length - 2].className == "mine messages") {
+                    chat.children[chat.children.length - 2].firstElementChild.classList.remove("last");
+                }
+            </script>
+            <div class="mine messages" >
+                <div class="message last" style="display:inline-flex;">
+                    <div class="wrap1">@item.message1</div><p style="font-size:10px;margin:0px 0px 5px 5px; ">@item.time_stamp.ToString("HH:mm")</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <script>
+                var chat = document.getElementById("messages_panel");
+
+                if (chat.children[chat.children.length - 2].className == "yours messages") {
+                    chat.children[chat.children.length - 2].firstElementChild.classList.remove("last");
+                }
+            </script>
+            <div class="yours messages">
+                <div class="message last" style="display:inline-flex; color:black">
+                    <p style="font-size:10px;margin:0px 5px 5px 0px;  ">@item.time_stamp.ToString("HH:mm")</p>
+                    <div class="wrap1">@item.message1</div>
+                </div>
+            </div>
+        }
+
+    }
+</div>
+
+<input type="text" name="message" class="" placeholder="Message here" id="text" style="width:100%; margin:5px; min-width:80%; position:sticky">
+<input id="btn_send" type="submit" name="Send" class="btn btn-primary" style="margin: 5px" value="Send" >

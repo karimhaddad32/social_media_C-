@@ -1,0 +1,85 @@
+﻿@model Profile.Models.Profile
+
+<div>
+    <h4>Profile</h4>
+    <hr />
+    <div style="display:grid; grid-template-columns: auto auto">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayName("Profile Picture")
+            </dt>
+            <dd>
+                @if (Model.profile_picture != null)
+                {
+                    <img style="max-width:200px; max-height:200px; min-width:200px; min-height:200px" src="/Images/@Html.DisplayFor(model => model.Pictures.Single( p => p.picture_id == model.profile_picture).path)" />
+                }
+            </dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayName("First Name")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.first_name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.last_name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.last_name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.user_name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.user_name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.website)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.website)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.biography)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.biography)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.email_address)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.email_address)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.phone_number)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.phone_number)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.gender)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.gender)
+            </dd>
+        </dl>
+    </div>
+</div>

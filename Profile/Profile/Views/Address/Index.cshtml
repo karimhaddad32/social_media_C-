@@ -1,0 +1,22 @@
+﻿@model Profile.Models.Profile
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("ProfileDetails", Model)
+
+@if (Model.profile_id == int.Parse(Session["user_id"].ToString()))
+{
+    <p>
+        @Html.ActionLink("Add Address", "Add", new { id = Model.profile_id })
+    </p>
+}
+
+
+@Html.Partial("AddressesList", Model.Addresses)
+
+<p>
+    @Html.ActionLink("Back to Profile", "Details", "Home", new { id = Model.profile_id }, null)
+</p>
+

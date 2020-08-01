@@ -1,0 +1,36 @@
+﻿div, table {
+    font-size: 1.4rem;
+}
+
+.h7 {
+    font-size: 1.2rem;
+}
+
+.gedf-wrapper {
+    margin-top: 0.97rem;
+}
+
+@media (min-width: 992px) {
+    .gedf-main {
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+
+    .gedf-card {
+        margin-bottom: 2.77rem;
+    }
+}
+
+/**Reset Bootstrap*/
+.dropdown-toggle::after {
+    content: none;
+    display: none;
+}
+
+/*
+    Override navbar-brand text color
+    Keep navbar-inverse for white hover
+*/
+.navbar-inverse .navbar-brand {
+    color: midnightblue;
+}

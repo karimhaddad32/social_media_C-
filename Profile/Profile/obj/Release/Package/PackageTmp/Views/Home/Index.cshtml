@@ -1,0 +1,122 @@
+﻿@model IEnumerable<Profile.Models.Profile>
+
+@{
+    ViewBag.Title = "Home |";
+    int user_id = int.Parse(Session["user_id"].ToString());
+    
+}
+
+    <h2 style="padding-top: 14px; text-align: center">Profiles List</h2>
+
+  
+<div style="display:grid; grid-template-columns: 50% 50%">
+
+    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    {
+        <input type="text" name="text" class="form-control" placeholder="Search for a profile">
+        <input type="submit" name="Search" class="btn btn-primary" , style="margin: 5px 0px 5px 0px" value="Search">
+        @Html.ActionLink("Reset", "Index", new {id = user_id }, new { @class = "btn btn-primary", style = "margin: 5px 0px 5px 0px" })
+    }
+</div>
+
+
+<table class="table" style="font-family: 'Open Sans', sans-serif; overflow:auto; max-height: 600px">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.profile_picture)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.first_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.last_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.user_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.biography)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.gender)
+        </th>    
+       
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td style="vertical-align: middle">
+            @if (item.profile_picture != null)
+            {
+                <img class="img-circle" style="max-width:50px; max-height:50px; " src="/Images/@Html.DisplayFor(modelItem => item.Pictures.Single( p => p.picture_id == item.profile_picture).path)" />
+            }
+            else
+            {
+                <img class="img-circle" style="max-width:50px; max-height:50px;" src="/Images/Default.png" />
+            }
+        </td>
+        <td style="vertical-align: middle">
+            @Html.DisplayFor(modelItem => item.first_name)
+        </td>
+        <td style="vertical-align: middle">
+            @Html.DisplayFor(modelItem => item.last_name)
+        </td>
+
+        <td style="vertical-align: middle">
+                @Html.DisplayFor(modelItem => item.user_name)
+        </td>
+
+        <td style="vertical-align: middle">     
+            @Html.DisplayFor(modelItem => item.biography)
+        </td>
+
+        <td style="vertical-align: middle">
+            @Html.DisplayFor(modelItem => item.gender)
+        </td>
+
+        <td style="vertical-align: middle">
+            <div style="display: block; margin-bottom: 2px;">
+                @if (item.Friends.SingleOrDefault(f => f.receiver_id == user_id) != null)
+                {
+                    if (item.Friends.SingleOrDefault(f => f.sender_id == item.profile_id && f.receiver_id == user_id).accepted == false)
+                    {
+                        @Html.ActionLink("Accept Friend", "AcceptFriend", "", new { id = item.profile_id }, new { @class = "btn btn-success", @style = "width: 100%" });
+
+                    }
+                    else if (item.Friends.SingleOrDefault(f => f.sender_id == item.profile_id && f.receiver_id == user_id).accepted == true)
+                    {
+                        @Html.ActionLink("Remove Friend", "RemoveFriend", "", new { id = item.profile_id }, new { @class = "btn btn-danger", @style = "width: 100%"  });
+                    }
+
+                }
+                else if (item.Friends1.SingleOrDefault(f => f.sender_id == user_id) != null)
+                {
+                    if (item.Friends1.SingleOrDefault(f => f.sender_id == user_id).accepted == false)
+                    {
+                        @Html.ActionLink("Cancel Request", "RemoveFriend", "", new { id = item.profile_id }, new { @class = "btn btn-danger", @style = "width: 100%"  });
+                    }
+                    else if (item.Friends1.SingleOrDefault(f => f.sender_id == user_id).accepted == true)
+                    {
+                        @Html.ActionLink("Remove Friend", "RemoveFriend", "", new { id = item.profile_id }, new { @class = "btn btn-danger", @style = "width: 100%"  });
+                    }
+                }
+                else
+                {
+                    @Html.ActionLink("Add friend", "AddFriend", "", new { id = item.profile_id }, new { @class = "btn btn-primary", @style = "width: 100%"  });
+                }
+            </div>
+            <div style="display: block; margin-bottom: 2px;">
+                @Html.ActionLink("View Profile", "Details", "", new { id = item.profile_id }, new { @class = "btn btn-primary", @style = "width: 100%"  })
+            </div>
+            <div style="display: block; margin-bottom: 2px;">
+                @Html.ActionLink("Send a Message", "MessageDetails", "Message", new { id = item.profile_id }, new { @class = "btn btn-primary", @style = "width: 100%"  })
+            </div>
+        </td>
+    </tr>
+    }
+
+</table>

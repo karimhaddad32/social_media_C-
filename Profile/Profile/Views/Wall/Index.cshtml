@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Profile.Models.Picture>
+
+@{
+    ViewBag.Title = "Index";
+    int user_id = int.Parse(Session["user_id"].ToString());
+}
+<div style="text-align: center">
+    <h2 style="padding-top: 10px">Home Page</h2>
+    <h4>Posts</h4>
+</div>
+
+@Html.ActionLink("Post a picture", "Add", "Picture", new { id = user_id }, null)
+@Html.Partial("~/Views/Home/PicturesList.cshtml", Model)

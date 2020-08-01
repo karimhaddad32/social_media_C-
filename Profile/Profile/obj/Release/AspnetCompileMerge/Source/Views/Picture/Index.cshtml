@@ -1,0 +1,20 @@
+﻿@model Profile.Models.Profile
+
+@{
+    ViewBag.Title = "Pictures |";
+}
+
+@Html.Partial("ProfileDetails", Model)
+
+<p>
+    @Html.ActionLink("Add Picture", "Add", new { id = Model.profile_id }) 
+</p>
+
+
+@Html.Partial("PicturesList", Model.Pictures)
+
+<p>
+    @Html.ActionLink("Back to Profile", "Details", "Home", new { id = Model.profile_id }, null)
+</p>
+
+

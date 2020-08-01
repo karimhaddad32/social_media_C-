@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title Social Media Profiles</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/Content/form.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/posts.css" rel="stylesheet" type="text/css" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="~/Content/messages.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/reactions.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Dosis&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Farro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href="~/Content/notification-modal.css" rel="stylesheet" type="text/css" />
+</head>
+<body style="background-image: url(/Images/Backgrounds/ocean_background.jpg) ; background-size: cover; background-attachment: fixed">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: steelblue">
+        <div class="container">
+            <div class="navbar-header">
+
+                @if (Session["user_id"] != null)
+                {
+                    int current_id = int.Parse(Session["user_id"].ToString());
+                    string action = this.ViewContext.Controller.ControllerContext.RouteData.Values["action"].ToString();
+                    @Html.ActionLink("Home Page", "Index", "Wall", new { area = "" }, new { @class = "navbar-brand fa fa-home   " })
+                    @Html.ActionLink("My Profile", "Details", "Home", new { id = current_id }, new { @class = "navbar-brand  fa fa-user" })
+                    @Html.ActionLink("Add Friends", "Index", "Home", new { id = current_id }, new { @class = "navbar-brand fa fa-users" })
+
+                    <!-- Messages with unread count -->
+                    @Html.ActionLink("Messages", "Index", "Message", new { id = current_id }, new { @class = "navbar-brand fa fa-comments-o", id = "msg_id"  })
+                    <script>
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("GetCount", "Message")",
+                            data: null,
+                            success: function (res) {
+                                var count = res.count;
+                                var msg = document.getElementById("msg_id");
+
+                                if (res.count > 0) {
+                                    msg.innerText = "Messages (" + res.count + ")";
+                                    msg.classList.add('text-danger');
+                                } else {
+                                    msg.innerText = "Messages";
+                                    msg.classList.remove('text-danger');
+                                }
+                            },
+                            dataType: 'json'
+                            });
+                    </script>
+
+                    <!-- Notifications with unseen count -->
+                    @Html.ActionLink("Notifications", "Index", "Notification", new { id = current_id }, new { @class = "navbar-brand fa  fa-bell", id = "notif_id" })
+                    <script>
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("GetCount", "Notification")",
+                            data: null,
+                            success: function (res) {
+                                var count = res.count;
+                                var notif = document.getElementById("notif_id");
+
+                                if (res.count > 0) {
+                                    notif.innerText = "Notifications (" + res.count + ")";
+                                    notif.classList.add('text-danger');
+                                } else {
+                                    notif.innerText = "Notifications";
+                                    notif.classList.remove('text-danger');
+                                }
+                            },
+                            dataType: 'json'
+                            });
+                    </script>
+                    @Html.ActionLink("Logout", "Index", "Login", new { area = "" }, new { @class = "navbar-brand fa fa-sign-out" })
+                    switch (action)
+                    {
+                        case "MessageDetails":
+                            {
+                                @Html.ActionLink("Back to messages list", "Index", new { id = current_id }, new { @class = "navbar-brand fa fa-arrow-left " })
+                            };
+                            break;
+                    }
+                }
+                else
+                {
+                    @Html.ActionLink("Social Media Profile", "Index", "Login", null, new { @class = "navbar-brand fa fa-globe" })
+                }
+
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content" style="background-color: midnightblue; color:white" >
+
+            @RenderBody()
+
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Social Media Profiles</p>
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

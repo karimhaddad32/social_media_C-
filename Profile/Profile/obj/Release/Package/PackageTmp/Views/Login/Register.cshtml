@@ -1,0 +1,57 @@
+﻿@model Profile.Models.User
+
+@{
+    ViewBag.Title = "Register";
+}
+
+
+
+    <div class="bg-img" style="background-image: url(/Images/Backgrounds/social_media_background.jpg); color: white">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="container1" style="background-color: midnightblue">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <h1  style="padding-bottom: 10px;">Register</h1>
+                <div>
+                    @Html.LabelFor(model => model.username)
+                    <div>
+                        @Html.EditorFor(model => model.username, new { htmlAttributes = new { placeholder = "Enter Username" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                </div>
+
+                <div>
+                    @Html.LabelFor(model => model.password, htmlAttributes: new { })
+                    <div>
+                        @Html.PasswordFor(model => model.password, new { placeholder = "Enter Password" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                </div>
+
+
+                <div>
+                    <div>
+                        @if (ViewBag.Message != "")
+                        {
+                            <p class="text-danger">@ViewBag.Message</p>
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <div style="padding-bottom: 20px">
+                        <input type="submit" value="Register" class="btn1" />
+                    </div>
+                        Already have an account? @Html.ActionLink("Login", "Index", new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        }
+        </div>
+
+  
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

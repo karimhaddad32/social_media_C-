@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Profile.Models.Address>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.street_address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.city)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.province)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.postal_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country.country_code)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.street_address)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.city)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.province)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.postal_code)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Country.country_code)
+    </td>
+    @if (item.profile_id == int.Parse(Session["user_id"].ToString()))
+    {
+        <td>
+            @Html.ActionLink("Edit", "Edit", "Address", new { id = item.address_id }, null) |
+            @Html.ActionLink("Details", "Details", "Address", new { id = item.address_id }, null) |
+            @Html.ActionLink("Delete", "Delete", "Address", new { id = item.address_id }, null)
+        </td>
+    }
+
+</tr>
+}
+
+</table>

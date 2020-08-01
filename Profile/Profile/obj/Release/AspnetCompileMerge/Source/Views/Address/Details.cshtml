@@ -1,0 +1,65 @@
+﻿@model Profile.Models.Address
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2 style="padding-top: 14px; padding-left: 8px">Details</h2>
+
+<div>
+    <h4 style="padding-top: 10px; padding-left: 8px">Address</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.street_address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.street_address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.city)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.city)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.province)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.province)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.postal_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.postal_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Country.country_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Country.country_code)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.address_id }) |
+    @Html.ActionLink("Back to List", "Index", new {id = Model.profile_id})
+</p>

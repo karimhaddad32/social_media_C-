@@ -1,0 +1,204 @@
+﻿@model Profile.Models.Profile
+
+@{
+    ViewBag.Title = "Details";
+    int user_id = int.Parse(Session["user_id"].ToString());
+}
+
+@if (Model.profile_id == user_id)
+{
+    <h2 style="padding-top: 14px; text-align: center">My Profile</h2>
+}
+else
+{
+    <h2 style="padding-top: 14px; padding-left: 8px">@Model.first_name @Model.last_name</h2>
+}
+
+<div>
+    <hr />
+    <div style="display:grid; grid-template-columns: auto auto; font-family: 'Open Sans', sans-serif; font-size: 16px">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayName("Profile Picture")
+            </dt>
+            <dd>
+                @if (Model.profile_picture != null)
+                {
+                    <img class="img-circle" style="max-width:220px; max-height:220px; min-width:220px; min-height:220px" src="/Images/@Html.DisplayFor(model => model.Pictures.Single( p => p.picture_id == model.profile_picture).path)" />
+                }
+                else
+                {
+                    <img class="img-circle" style="max-width:220px; max-height:220px; min-width:220px; min-height:220px" src="/Images/Default.png" />
+                }
+            </dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.first_name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.first_name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.last_name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.last_name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.user_name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.user_name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.biography)
+            </dt>
+            <dd>
+
+                @Html.DisplayFor(model => model.biography)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.gender)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.gender)
+            </dd>
+
+
+            @if ((Model.Friends1.SingleOrDefault(f => f.Profile.profile_id == user_id) != null &&
+                Model.Friends1.SingleOrDefault(f => f.Profile.profile_id == user_id).accepted == true) || Model.profile_id == user_id)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.website)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.website)
+
+                </dd>
+
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.email_address)
+                </dt>
+
+                <dd>
+
+                    @Html.DisplayFor(model => model.email_address)
+
+
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.phone_number)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.phone_number)
+                </dd>
+            }
+
+            @if (Model.profile_id == user_id)
+            {
+                <dt>
+
+                    @Html.DisplayNameFor(model => model.Addresses)
+
+                </dt>
+
+                <dd>
+
+                    @Html.ActionLink("List of addresses", "Index", "Address", new { id = Model.profile_id }, null)
+
+                </dd>
+                <dt>
+
+                </dt>
+                <dd>
+                    @Html.ActionLink("Edit Profile", "Edit", new { id = Model.profile_id })
+                </dd>
+                <dd>
+                    @Html.ActionLink("Change password", "EditPassword", new { id = Model.User.user_id })
+                </dd>
+            }
+        </dl>
+
+    </div>
+    <div style="display: inline-block;">
+        @if (Model.profile_id != user_id)
+        {
+            if (Model.Friends.SingleOrDefault(f => f.receiver_id == user_id) != null)
+            {
+                if (Model.Friends.SingleOrDefault(f => f.sender_id == Model.profile_id && f.receiver_id == user_id).accepted == false)
+                {
+                    @Html.ActionLink("Accept Friend", "AcceptFriend", "", new { id = Model.profile_id }, new { @class = "btn btn-success" });
+
+                }
+                else if (Model.Friends.SingleOrDefault(f => f.sender_id == Model.profile_id && f.receiver_id == user_id).accepted == true)
+                {
+                    @Html.ActionLink("Remove Friend", "RemoveFriend", "", new { id = Model.profile_id }, new { @class = "btn btn-danger" });
+                }
+
+            }
+            else if (Model.Friends1.SingleOrDefault(f => f.sender_id == user_id) != null)
+            {
+                if (Model.Friends1.SingleOrDefault(f => f.sender_id == user_id).accepted == false)
+                {
+                    @Html.ActionLink("Cancel Request", "RemoveFriend", "", new { id = Model.profile_id }, new { @class = "btn btn-danger" });
+                }
+                else if (Model.Friends1.SingleOrDefault(f => f.sender_id == user_id).accepted == true)
+                {
+                    @Html.ActionLink("Remove Friend", "RemoveFriend", "", new { id = Model.profile_id }, new { @class = "btn btn-danger" });
+                }
+            }
+            else
+            {
+                @Html.ActionLink("Add friend", "AddFriend", "", new { id = Model.profile_id }, new { @class = "btn btn-primary" });
+            }
+        }
+    </div>
+    <div style="display: inline-block;">
+        @if (Model.profile_id != user_id)
+        {
+            @Html.ActionLink("Send a Message", "MessageDetails", "Message", new { id = Model.profile_id }, new { @class = "btn btn-primary" })
+        }
+    </div>
+    <p style="margin-top: 1em;">
+        @Html.ActionLink("Back to your Wall", "Index", "Wall")
+    </p>
+</div>
+
+@if (Model.profile_id == int.Parse(Session["user_id"].ToString()))
+{
+    <h4>Addresses</h4>
+    @Html.Partial("AddressesList", Model.Addresses)
+}
+
+<h4>Posts</h4>
+
+@if (Model.profile_id == user_id)
+{
+    @Html.ActionLink("Post a picture", "Add", "Picture", new { id = Model.profile_id }, null)
+}
+
+@if (Model.profile_id == user_id)
+{
+
+    @Html.Partial("PicturesList", Model.Pictures)
+}
+else
+{
+    if (Model.Friends1.SingleOrDefault(f => f.sender_id == user_id && f.accepted == true) != null)
+    {
+        @Html.Partial("PicturesList", Model.Pictures)
+    }
+    else if (Model.Friends.SingleOrDefault(f => f.receiver_id == user_id && f.accepted == true) != null)
+    {
+        @Html.Partial("PicturesList", Model.Pictures)
+    }
+}
+

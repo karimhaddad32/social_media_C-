@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Profile.Models.Message>
+
+@{
+    ViewBag.Title = "Index";
+    int profile_id = int.Parse(Session["user_id"].ToString());
+    
+}
+
+
+
+<div class="gedf-card" style="overflow:auto; height: 500px; max-height:500px;" >
+    <h2 style="padding-top: 14px; padding-bottom: 10px; text-align: center">Messages List</h2>
+    @if (Model.Count() > 0)
+    {
+<ul class="list-group">
+    @foreach (var item in Model.OrderByDescending(m => m.time_stamp))
+    {
+        if (profile_id == item.sender_id)
+        {
+
+            <li class=" list-group-item list-group-item-action" style="cursor:pointer; display:inline-flex; background-color:lightsteelblue; display:grid; grid-template-columns: auto auto auto" onclick="location.href = '@Url.Action("Details", "Message", new { id = item.message_id }, null)'">
+                <div style=" background-color:transparent">
+                    <img class="img-circle" src="/Images/@(item.Profile1.Pictures.SingleOrDefault(p => p.picture_id == item.Profile1.profile_picture) != null ? item.Profile1.Pictures.SingleOrDefault(p => p.picture_id == item.Profile1.profile_picture).path : "Default.png" )" style="width:75px; height:75px">
+                    <span class="w3-large" style="margin-left: 1em">@item.Profile1.user_name</span>
+                </div>
+                <div style="margin:auto">@item.message1</div>
+                <div style="margin:auto">@item.time_stamp</div>
+            </li>
+        }
+        else
+        {
+            <!-- Nearly identical code in both, used to change li background color when new -->
+            if (item.seen == false)
+            {
+                <li class=" list-group-item list-group-item-action" style="cursor:pointer; display:inline-flex; background-color:skyblue; display:grid; grid-template-columns: auto auto auto" onclick="location.href = '@Url.Action("Details", "Message", new { id = item.message_id }, null)'">
+                    <div style=" background-color:transparent">
+                        <img class="img-circle" src="/Images/@(item.Profile.Pictures.SingleOrDefault(p => p.picture_id == item.Profile.profile_picture) != null ? item.Profile.Pictures.SingleOrDefault(p => p.picture_id == item.Profile.profile_picture).path : "Default.png" )" style="width:75px; height:75px">
+                        <span class="w3-large" style="margin-left: 1em">@item.Profile.user_name</span>
+                        <span style="font-weight: bold; color: red; margin-left: 1em;">@item.Profile1.Messages1.Where(m => m.sender_id == item.sender_id && m.seen == false).Count() NEW!</span>
+                    </div>
+                    <div style="margin:auto">@item.message1</div>
+                    <div style="margin:auto">@item.time_stamp</div>
+                </li>
+            }
+            else
+            {
+                <li class=" list-group-item list-group-item-action" style="cursor:pointer; display:inline-flex; background-color:lightsteelblue; display:grid; grid-template-columns: auto auto auto" onclick="location.href = '@Url.Action("Details", "Message", new { id = item.message_id }, null)'">
+                    <div style=" background-color:transparent">
+                        <img class="img-circle" src="/Images/@(item.Profile.Pictures.SingleOrDefault(p => p.picture_id == item.Profile.profile_picture) != null ? item.Profile.Pictures.SingleOrDefault(p => p.picture_id == item.Profile.profile_picture).path : "Default.png" )" style="width:75px; height:75px">
+                        <span class="w3-large" style="margin-left: 1em">@item.Profile.user_name</span>
+                    </div>
+                    <div style="margin:auto">@item.message1</div>
+                    <div style="margin:auto">@item.time_stamp</div>
+                </li>
+            }
+
+        }
+    }
+</ul>
+    }
+
+</div>
+
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d6f8dec8514a4fc3897f506206220553" Name="Diagram1">
+        <EntityTypeShape EntityType="ProfilesDBModel.Address" Width="1.5" PointX="5.25" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Comment" Width="1.5" PointX="7.5" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Comment_Reaction" Width="1.5" PointX="9.75" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Country" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Friend" Width="1.5" PointX="5.25" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Message" Width="1.5" PointX="5.25" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Picture" Width="1.5" PointX="5.25" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Picture_Reaction" Width="1.5" PointX="10.5" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Profile" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Reaction_Type" Width="1.5" PointX="7.5" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.Tag" Width="1.5" PointX="7.5" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProfilesDBModel.User" Width="1.5" PointX="0.75" PointY="10.25" IsExpanded="true" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Address_Country" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Address_Profile" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Comment_Picture" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Comment_Profile" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Comment_Reaction_Comment" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Comment_Reaction_Profile" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Comment_Reaction_Reaction_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Friends_Profile_1" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Friends_Profile_2" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Message_Profile_1" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Message_Profile_2" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Picture_Profile" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Picture_Reaction_Picture" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Profile_Picture" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Tag_Picture" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Picture_Reaction_Profile" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Picture_Reaction_Reaction_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Profile_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Tag_Profile_1" ManuallyRouted="false" />
+        <AssociationConnector Association="ProfilesDBModel.FK_Tag_Profile_2" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
