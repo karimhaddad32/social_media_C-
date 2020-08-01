@@ -4,7 +4,9 @@ A Facebook clone.
 # Contributers:
 
 Karim Haddad
+
 Eliza Gaudio
+
 Peter Guakov
 
 
